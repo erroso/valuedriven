@@ -1,0 +1,57 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+rule DvdValueExchange2IStarGoal
+	transform t : DynamicValueDescriptionModel!ValueExchange
+	to n : IStar!Goal{
+
+		n.name = t.description;
+	}	
+	
+rule DvdValueObjet2IstarResource
+	transform t : DynamicValueDescriptionModel!ValueObject
+	to n : IStar!Resource{
+
+		n.name = t.name;
+	}		
+	
+	
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

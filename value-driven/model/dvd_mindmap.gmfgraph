@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="ASCII"?>
+<gmfgraph:Canvas xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gmfgraph="http://www.eclipse.org/gmf/2006/GraphicalDefinition" name="dvd_mindmap">
+  <figures name="Default">
+    <figures xsi:type="gmfgraph:PolylineDecoration" name="EdgeFigureTargetDecoration"/>
+    <descriptors name="NodeFigure">
+      <actualFigure xsi:type="gmfgraph:RoundedRectangle" name="NodeFigure">
+        <border xsi:type="gmfgraph:MarginBorder">
+          <insets top="5" left="5" bottom="5" right="5"/>
+        </border>
+        <children xsi:type="gmfgraph:Label" name="NodeLabelFigure" text="Node"/>
+      </actualFigure>
+      <accessors accessor="getFigureNodeLabelFigure" figure="//@figures.0/@descriptors.0/@actualFigure/@children.0"/>
+    </descriptors>
+    <descriptors name="ValueExchangeFigure">
+      <actualFigure xsi:type="gmfgraph:RoundedRectangle" name="ValueExchangeFigure">
+        <border xsi:type="gmfgraph:MarginBorder">
+          <insets top="5" left="5" bottom="5" right="5"/>
+        </border>
+        <children xsi:type="gmfgraph:Label" name="ValueExchangeLabelFigure" text="ValueExchange"/>
+      </actualFigure>
+      <accessors accessor="getFigureValueExchangeLabelFigure" figure="//@figures.0/@descriptors.1/@actualFigure/@children.0"/>
+    </descriptors>
+    <descriptors name="OutValuePortFigure">
+      <actualFigure xsi:type="gmfgraph:RoundedRectangle" name="OutValuePortFigure">
+        <border xsi:type="gmfgraph:MarginBorder">
+          <insets top="5" left="5" bottom="5" right="5"/>
+        </border>
+        <children xsi:type="gmfgraph:Label" name="OutValuePortLabelFigure" text="OutValuePort"/>
+      </actualFigure>
+      <accessors accessor="getFigureOutValuePortLabelFigure" figure="//@figures.0/@descriptors.2/@actualFigure/@children.0"/>
+    </descriptors>
+    <descriptors name="ValueObjectFigure">
+      <actualFigure xsi:type="gmfgraph:RoundedRectangle" name="ValueObjectFigure">
+        <border xsi:type="gmfgraph:MarginBorder">
+          <insets top="5" left="5" bottom="5" right="5"/>
+        </border>
+        <children xsi:type="gmfgraph:Label" name="ValueObjectLabelFigure" text="ValueObject"/>
+      </actualFigure>
+      <accessors accessor="getFigureValueObjectLabelFigure" figure="//@figures.0/@descriptors.3/@actualFigure/@children.0"/>
+    </descriptors>
+    <descriptors name="MainActorFigure">
+      <actualFigure xsi:type="gmfgraph:CustomFigure" name="MainActorFigure" qualifiedClassName="figures.MainActorFigure"/>
+    </descriptors>
+    <descriptors name="MainActorLabelFigure">
+      <actualFigure xsi:type="gmfgraph:Label" name="MainActorLabelFigure" text="MainActor"/>
+    </descriptors>
+    <descriptors name="EnvironmentActorFigure">
+      <actualFigure xsi:type="gmfgraph:Rectangle" name="EnvironmentActorFigure">
+        <backgroundColor xsi:type="gmfgraph:RGBColor" red="102" green="178" blue="255"/>
+        <border xsi:type="gmfgraph:MarginBorder">
+          <insets top="5" left="5" bottom="5" right="5"/>
+        </border>
+        <children xsi:type="gmfgraph:Label" name="EnvironmentActorLabelFigure" text="EnvironmentActor"/>
+      </actualFigure>
+      <accessors accessor="getFigureEnvironmentActorLabelFigure" figure="//@figures.0/@descriptors.6/@actualFigure/@children.0"/>
+    </descriptors>
+    <descriptors name="InValuePortFigure">
+      <actualFigure xsi:type="gmfgraph:RoundedRectangle" name="InValuePortFigure">
+        <border xsi:type="gmfgraph:MarginBorder">
+          <insets top="5" left="5" bottom="5" right="5"/>
+        </border>
+        <children xsi:type="gmfgraph:Label" name="InValuePortLabelFigure" text="InValuePort"/>
+      </actualFigure>
+      <accessors accessor="getFigureInValuePortLabelFigure" figure="//@figures.0/@descriptors.7/@actualFigure/@children.0"/>
+    </descriptors>
+    <descriptors name="EdgeFigure">
+      <actualFigure xsi:type="gmfgraph:PolylineConnection" name="EdgeFigure" lineWidth="2" lineKind="LINE_DOT" targetDecoration="//@figures.0/@figures.0"/>
+    </descriptors>
+  </figures>
+  <nodes name="Node" figure="NodeFigure"/>
+  <nodes name="ValueExchange" figure="ValueExchangeFigure"/>
+  <nodes name="OutValuePort" figure="OutValuePortFigure"/>
+  <nodes name="ValueObject" figure="ValueObjectFigure"/>
+  <nodes name="MainActor" figure="MainActorFigure"/>
+  <nodes name="EnvironmentActor" figure="EnvironmentActorFigure"/>
+  <nodes name="InValuePort" figure="InValuePortFigure"/>
+  <connections name="Edge" figure="EdgeFigure"/>
+  <labels name="NodeLabel" figure="NodeFigure" accessor="//@figures.0/@descriptors.0/@accessors.0"/>
+  <labels name="ValueExchangeLabel" figure="ValueExchangeFigure" accessor="//@figures.0/@descriptors.1/@accessors.0"/>
+  <labels name="OutValuePortLabel" figure="OutValuePortFigure" accessor="//@figures.0/@descriptors.2/@accessors.0"/>
+  <labels name="ValueObjectLabel" figure="ValueObjectFigure" accessor="//@figures.0/@descriptors.3/@accessors.0"/>
+  <labels name="MainActorLabel" figure="MainActorLabelFigure" elementIcon="false"/>
+  <labels name="EnvironmentActorLabel" figure="EnvironmentActorFigure" accessor="//@figures.0/@descriptors.6/@accessors.0"/>
+  <labels name="InValuePortLabel" figure="InValuePortFigure" accessor="//@figures.0/@descriptors.7/@accessors.0"/>
+</gmfgraph:Canvas>

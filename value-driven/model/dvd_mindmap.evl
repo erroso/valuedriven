@@ -1,0 +1,380 @@
+
+context MainActor {
+	constraint OnlyOneMainActor {
+		check{ 	
+			var dvd = DynamicValueDescriptionModel.allInstances().at(0);
+			var response = true;
+			var count = 0;
+			var messageText = "There can only be one Main Actor in a DVD Model:";
+						
+			for (i in dvd.nodes){
+				if(i.type.name.compareTo("MainActor") == 0){
+					messageText := messageText+"<"+i.name+">";
+					count=count+1;
+				}
+			}
+			if(count>1)response = false;
+			return response;		
+}
+		message: messageText
+￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼	} 
+
+	
+	constraint MainActorMustHaveAnEdge 
+	{
+		check 
+		{
+			var dvd = DynamicValueDescriptionModel.allInstances().at(0);
+			var n := Node;
+			var messageText := "Main Actor must have an edge associated: ";
+			n = dvd.nodes.select(n : Node | n.type.name.compareTo("MainActor") == 0 and dvd.edges.select(c: Edge | c.source = n or c.target = n).isEmpty()); 
+			
+			if (n.isEmpty())
+				return true;
+			else
+			{
+				for (i in n){
+					messageText :=messageText+"<"+i.name+">";
+				}
+				return false;
+			}
+		}
+		message : messageText
+	}
+
+
+	constraint nameNotEmpty {
+￼￼￼￼		check : self.name.isDefined()
+		message: "Main Actor must have a name."
+	}
+	
+	
+	constraint LinkWithEnvironmentActor {
+
+		check {
+			var dvd = DynamicValueDescriptionModel.allInstances().at(0); 
+			var messageText = "Main actor must be connected to the environment actor: ";
+				
+			
+			// run all edges
+			for (i in dvd.edges){
+				
+				// find edges of which has source linked with the main actor
+				if(i.source.name.equals(self.name)){
+						// run all nodes
+						for (x in dvd.nodes){
+								// verify if the node is a EnvironmentActor and if it has the same name found in target field of edge
+								if(i.target.name.equals(x.name) and x.type.name.compareTo("EnvironmentActor") == 0){
+									return true;
+								}
+						}		
+				}else if(i.target.name.equals(self.name)){
+						// run all nodes
+						for (x in dvd.nodes){
+								// verify if the node is a EnvironmentActor and if it has the same name found in source field of edge
+								if(i.source.name.equals(x.name) and x.type.name.compareTo("EnvironmentActor") == 0){
+									return true;
+								}
+						}		
+				}
+			}
+			messageText =messageText +"<"+self.name+">";	
+			return false;
+
+		}
+		message : messageText
+ 	}
+	
+	
+} // end context MainActor
+
+
+context Edge {
+	constraint PointToSelf {
+
+		check {
+			var r = self.select(e: Edge | ((e.source <> null and e.source.name <> null) and e.source.name.equals(e.target.name) and e.source.type().name.equals(e.target.type().name)));
+			return r.size() == 0;
+		}
+		message : "Nodes cannot connect to themselves"
+ 	}
+} //end context Edge
+
+
+context EnvironmentActor{
+
+	constraint nameNotEmpty {
+￼￼￼￼		check : self.name.isDefined()
+		message: "Environment Actor must have a name."
+	}
+
+	constraint LinkWithMainActor {
+
+		check {
+			var dvd = DynamicValueDescriptionModel.allInstances().at(0); 
+			var mainActor;
+			var edges;
+			var messageText = "Environment actor must be connected to the main actor: <"+self.name+">";
+			var response = false;
+			
+			// find main actor
+			for (i in dvd.nodes){
+				if(i.type.name.compareTo("MainActor") == 0){
+					mainActor=i;
+					break;
+				}
+			}
+
+			for (i in dvd.edges){				
+				// find edges of which has source or target linked with the main actor
+				if(i.source.name.equals(mainActor.name)){
+					if( i.target.name.equals(self.name)){
+						response = true;
+						break;
+					}
+				}else if(i.target.name.equals(mainActor.name)){
+					if( i.source.name.equals(self.name)){
+						response = true;
+						break;
+					}
+				}		
+			}			
+			return response;
+		}
+		message : messageText
+ 	}
+ 	
+ 	
+ 	
+ 	constraint LinkWithValueExchange {
+
+		check {
+			var dvd = DynamicValueDescriptionModel.allInstances().at(0); 
+			var messageText = "Environment actor must be connected to one or more value exchange: <"+self.name+">";
+			var response = false;
+			
+			// find value exchanges
+			for (i in dvd.nodes){
+				if(i.type.name.compareTo("ValueExchange") == 0){
+					for (x in dvd.edges){				
+						// find edges of which has source or target linked with the main actor
+						if(x.source.name.equals(i.name)){
+							if( x.target.name.equals(self.name)){
+								response = true;
+								break;
+							}
+						}else if(x.target.name.equals(i.name)){
+							if( x.source.name.equals(self.name)){
+								response = true;
+								break;
+							}
+						}		
+					}	
+					
+				}
+			}
+
+					
+			return response;
+		}
+		message : messageText
+ 	} 	
+} //end context EnvironmenActor
+
+context ValueExchange{
+	
+	constraint ActorsDefinition {
+		check : self.mainActor.isDefined() and self.environmentActor.isDefined()
+		message : 'The value exchange must be associated to both "main actor" and "environment actor".'
+ 	}
+
+	constraint ValuePortsDefinition {
+		check : self.outValuePort.isDefined() and self.inValuePort.isDefined()
+		message : 'The value exchange must have be associated to one "in port"" and one "out port".'
+ 	}
+
+
+	constraint LinkWithEnvironmentActor {
+
+		check {
+			var dvd = DynamicValueDescriptionModel.allInstances().at(0); 
+			var messageText = "Value Exchange must be connected to one Environment Actor: <"+self.name+">";
+			var response = false;
+			
+			// find value exchanges
+			for (i in dvd.nodes){
+				if(i.type.name.compareTo("EnvironmentActor") == 0){
+					for (x in dvd.edges){				
+						if(x.source.name.equals(i.name)){
+							if( x.target.name.equals(self.name)){
+								response = true;
+								break;
+							}
+						}else if(x.target.name.equals(i.name)){
+							if( x.source.name.equals(self.name)){
+								response = true;
+								break;
+							}
+						}		
+					}	
+					
+				}
+			}
+
+					
+			return response;
+		}
+		message : messageText
+ 	}
+ 	
+
+constraint LinkWithOutValuePort{
+
+		check {
+			var dvd = DynamicValueDescriptionModel.allInstances().at(0); 
+			var messageText = 'Value Exchange must be connected to one "Out Value Port": ';
+			var messageText2 = 'Value Exchange must be connected to only one "Out Value Port": ';
+			var messageFragment="";
+			var response = true;
+			var count=0;
+			for (i in dvd.nodes){
+				if(i.type.name.compareTo("OutValuePort") == 0){
+					for (x in dvd.edges){				
+						if(x.source.name.equals(i.name)){
+							if(x.target.name.equals(self.name)){
+								messageFragment = messageFragment+"<"+self.name+">";
+								count=count+1;
+							}
+						}else if(x.target.name.equals(i.name)){
+							if( x.source.name.equals(self.name)){
+								messageFragment = messageFragment+"<"+self.name+">";
+								count=count+1;
+							}
+						}		
+					}	
+					
+				}
+			}
+			if(count < 1) {
+				response=false;
+				messageText=messageText+messageFragment;
+			}else if (count > 1){
+				response=false;
+				messageText=messageText2+messageFragment;
+			}					
+			return response;
+		}
+		message : messageText
+ 	}
+
+
+constraint LinkWithInValuePort{
+
+		check {
+			var dvd = DynamicValueDescriptionModel.allInstances().at(0); 
+			var messageText = 'Value Exchange must be connected to one "In Value Port": ';
+			var messageText2 = 'Value Exchange must be connected to only one "In Value Port": ';
+			var messageFragment = "";
+			var response = true;
+			var count=0;
+			for (i in dvd.nodes){
+				if(i.type.name.compareTo("InValuePort") == 0){
+					for (x in dvd.edges){				
+						if(x.source.name.equals(i.name)){
+							if(x.target.name.equals(self.name)){
+								messageFragment = messageFragment+"<"+self.name+">";
+								count=count+1;
+							}
+						}else if(x.target.name.equals(i.name)){
+							if( x.source.name.equals(self.name)){
+								messageFragment = messageFragment+"<"+self.name+">";
+								count=count+1;
+							}
+						}		
+					}	
+					
+				}
+			}
+			if(count < 1) {
+				response=false;
+				messageText=messageText+messageFragment;
+			}else if (count > 1){
+				response=false;
+				messageText=messageText2+messageFragment;
+			}		
+			return response;
+		}
+		message : messageText
+ 	}
+
+} //end context ValueExchange
+
+context InValuePort{
+
+	constraint ValueObjectDefinition {
+		check : self.valueObject.isDefined()
+		message : 'The InValuePort must be associated to one value object.'
+ 	}
+
+	
+
+
+} //end context InValuePort
+
+context OutValuePort{
+
+	constraint ValueObjectDefinition {
+		check : self.valueObject.isDefined()
+		message : 'The OutValuePort must be associated to one value object.'
+ 	}
+
+
+} //end context InValuePort
+
+context ValueObject{
+
+	constraint nameNotEmpty {
+￼￼￼￼		check : self.name.isDefined()
+		message: "Value Object must be defined."
+	}
+	
+	constraint LinkWithValuePorts{
+
+		check {
+			var dvd = DynamicValueDescriptionModel.allInstances().at(0); 
+			var messageText = 'Value Object must be connected to one "Value Port": ';
+			var messageText2 = 'Value Object must be connected to only one "Value Port": ';
+			var messageFragment ="";
+			var response = true;
+			var count=0;
+			for (i in dvd.nodes){
+				if(i.type.name.compareTo("InValuePort") == 0 or i.type.name.compareTo("OutValuePort") == 0){
+					for (x in dvd.edges){				
+						if(x.source.name.equals(i.name)){
+							if(x.target.name.equals(self.name)){
+								messageFragment = messageFragment+"<"+self.name+">";
+								count=count+1;
+							}
+						}else if(x.target.name.equals(i.name)){
+							if( x.source.name.equals(self.name)){
+								messageFragment = messageFragment+"<"+self.name+">";
+								count=count+1;
+							}
+						}		
+					}	
+					
+				}
+			}
+			if(count < 1) {
+				response=false;
+				messageText=messageText+messageFragment;
+			}else if (count > 1){
+				response=false;
+				messageText=messageText2+messageFragment;
+			}
+			return response;
+		}
+		message : messageText
+ 	}
+
+}

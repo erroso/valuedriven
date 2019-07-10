@@ -1,0 +1,63 @@
+context DeviceMonitor{
+/*	constraint hasSensors {
+		check {
+			for(a in self.hasDevice) {
+				if(a.type.name.compareTo("TemperatureSensor") == 0
+					or a.type.name.compareTo("SmokeSensor") == 0
+					or a.type.name.compareTo("GasSensor") == 0
+					or a.type.name.compareTo("FlameSensor") == 0){
+					return true;
+				}
+			}
+			return false;
+		}
+		message : 'Modo de Operacao Hibrido: Ao menos 1 Sensor Deve Ser Inserido.'
+	}
+	
+	constraint hasButtonForWarning {
+		check {
+			for(a in self.hasDevice) {
+				if(a.type.name.compareTo("DisableWarningButton") == 0){
+					return true;
+				}
+			}
+			return false;
+		}
+		message : 'Modo de Operacao Hibrido: Ao menos 1 Botao para Desabilitar Alerta Deve Ser Inserido.'
+	}
+	
+	constraint hasButtonOrHandleForAlarm {
+		check {
+			for(a in self.hasDevice) {
+				if(a.type.name.compareTo("EnableAndDisableAlarmButton") == 0
+					or a.type.name.compareTo("Handle") == 0){
+					return true;
+				}
+			}
+			return false;
+		}
+		message : 'Modo de Operacao Hibrido: Ao Menos 1 Botao ou 1 Alavanca Para Habilitar Alarme Deve Ser Inserido.'
+	} */
+}
+context ActuatorCompartment{
+/*	
+	constraint alarmActuator {
+		check { 
+			var lowSiren:=0;
+			var yellowLed:=0;
+			if(self.hasActuator.isDefined() and self.hasActuator.size >= 2){
+				for(a in self.hasActuator) {
+					if(a.type.name.compareTo("LowDecibels") == 0){
+						lowSiren := lowSiren+1;
+					}
+					if(a.type.name.compareTo("YellowLed") == 0){
+						yellowLed := yellowLed+1;
+					}
+				}
+			}
+			if (lowSiren > 0 and yellowLed >0){return true;}else{return false;}	
+			
+		}
+		message : 'Modo de Operacao Hibrido: Ao Menos 1 Sirene Com Baixo Volume e 1 Lampada Amarela Devem Serem Inseridas.'
+	} */
+}

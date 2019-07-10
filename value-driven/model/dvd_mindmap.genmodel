@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="" modelDirectory="/value-driven/src" modelPluginID="value-driven"
+    modelName="Dvd_mindmap" importerID="org.eclipse.emf.importer.ecore" complianceLevel="6.0"
+    copyrightFields="false">
+  <foreignModel>dvd_mindmap.emf</foreignModel>
+  <genPackages prefix="Dvd_mindmap" disposableProviderFactory="true" ecorePackage="dvd_mindmap.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="dvd_mindmap.ecore#//EnumPriority">
+      <genEnumLiterals ecoreEnumLiteral="dvd_mindmap.ecore#//EnumPriority/low"/>
+      <genEnumLiterals ecoreEnumLiteral="dvd_mindmap.ecore#//EnumPriority/medium"/>
+      <genEnumLiterals ecoreEnumLiteral="dvd_mindmap.ecore#//EnumPriority/high"/>
+      <genEnumLiterals ecoreEnumLiteral="dvd_mindmap.ecore#//EnumPriority/notDefined"/>
+    </genEnums>
+    <genClasses ecoreClass="dvd_mindmap.ecore#//DynamicValueDescriptionModel">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dvd_mindmap.ecore#//DynamicValueDescriptionModel/edges"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dvd_mindmap.ecore#//DynamicValueDescriptionModel/nodes"/>
+    </genClasses>
+    <genClasses ecoreClass="dvd_mindmap.ecore#//Node">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dvd_mindmap.ecore#//Node/nodeID"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dvd_mindmap.ecore#//Node/visualNotation"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dvd_mindmap.ecore#//Node/name"/>
+    </genClasses>
+    <genClasses ecoreClass="dvd_mindmap.ecore#//Edge">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dvd_mindmap.ecore#//Edge/source"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dvd_mindmap.ecore#//Edge/target"/>
+    </genClasses>
+    <genClasses ecoreClass="dvd_mindmap.ecore#//ValueExchange">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dvd_mindmap.ecore#//ValueExchange/priority"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dvd_mindmap.ecore#//ValueExchange/valueLevelAgreement"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dvd_mindmap.ecore#//ValueExchange/environmentActor"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dvd_mindmap.ecore#//ValueExchange/mainActor"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dvd_mindmap.ecore#//ValueExchange/outValuePort"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dvd_mindmap.ecore#//ValueExchange/inValuePort"/>
+    </genClasses>
+    <genClasses ecoreClass="dvd_mindmap.ecore#//OutValuePort">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dvd_mindmap.ecore#//OutValuePort/belongsToValueExchange"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dvd_mindmap.ecore#//OutValuePort/valueObject"/>
+    </genClasses>
+    <genClasses ecoreClass="dvd_mindmap.ecore#//ValueObject"/>
+    <genClasses ecoreClass="dvd_mindmap.ecore#//MainActor">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dvd_mindmap.ecore#//MainActor/belongsToValueExchange"/>
+    </genClasses>
+    <genClasses ecoreClass="dvd_mindmap.ecore#//EnvironmentActor">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dvd_mindmap.ecore#//EnvironmentActor/belongsToValueExchange"/>
+    </genClasses>
+    <genClasses ecoreClass="dvd_mindmap.ecore#//Notation">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dvd_mindmap.ecore#//Notation/notationID"/>
+    </genClasses>
+    <genClasses ecoreClass="dvd_mindmap.ecore#//InValuePort">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dvd_mindmap.ecore#//InValuePort/belongsToValueExchange"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dvd_mindmap.ecore#//InValuePort/valueObject"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

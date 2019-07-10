@@ -1,0 +1,50 @@
+context DeviceMonitor{
+
+/*	constraint hasSensors {
+		check {
+			for(a in self.hasDevice) {
+				if(a.type.name.compareTo("TemperatureSensor") == 0
+					or a.type.name.compareTo("SmokeSensor") == 0
+					or a.type.name.compareTo("GasSensor") == 0
+					or a.type.name.compareTo("FlameSensor") == 0){
+					return false;
+				}
+			}
+			return true;
+		}
+		message : 'Modo de Operacao Manual: Sensores Nao Sao Permitidos.'
+	} */
+	
+/*	constraint hasButtonForWarning {
+		check {
+			for(a in self.hasDevice) {
+				if(a.type.name.compareTo("DisableWarningButton") == 0){
+					return false;
+				}
+			}
+			return true;
+		}
+		message : 'Modo de Operacao Manual: Botoes para Desabilitar Alerta Nao Sao Permitidos.'
+	} */
+	
+/*	constraint hasButtonForAlarm {
+		check {
+			for(a in self.hasDevice) {
+				if(a.type.name.compareTo("EnableAndDisableAlarmButton") == 0){
+					return true;
+				}
+			}
+			return false;
+		}
+		message : 'Modo de Operacao Manual: Ao Menos 1 Botao para Habilitar/Desabilitar Alarme Deve Ser Inserido.'
+	} */
+}
+
+context ReliabilityCompartment{
+	constraint hasReliability {
+		check {
+			if(self.hasReliability.isDefined() and self.hasReliability.type.name.compareTo("Enable") == 0){return false;}else{return true;}
+		}
+		message : 'Modo De Operacao Manual: A Redundancia Deve Ser Desabilitada.'
+	}
+}

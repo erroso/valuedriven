@@ -1,0 +1,434 @@
+context ActuatorCompartment{
+
+	constraint warningMessagesForAutomaticOrHybridMode {
+		check { 
+			var lowSiren:=0;
+			var yellowLed:=0;
+			var operationMode;
+			var fireMonitoring := FireMonitoringDomain.allInstances().at(0);
+			var verify:=false;
+			
+			for (i in fireMonitoring.hasElement){
+				if(i.type.name.compareTo("OperationModeCompartment") == 0 and i.hasOperationMode.isDefined()){
+					operationMode:=i.hasOperationMode;
+					if(operationMode.type.name.compareTo("Automatic") == 0 or operationMode.type.name.compareTo("Hybrid") == 0){
+						verify:=true;
+					}
+					break;
+				}
+			}
+			if(verify and self.hasActuator.isDefined() and self.hasActuator.size >= 2){
+					for(a in self.hasActuator) {
+						
+						if(a.type.name.compareTo("LowDecibels") == 0){
+							lowSiren := lowSiren+1;
+						}
+						if(a.type.name.compareTo("YellowLed") == 0){
+							yellowLed := yellowLed+1;
+						}
+					}
+			}
+			
+			if(verify){
+				if (lowSiren > 0 and yellowLed >0){return true;}else{return false;}	
+			}else{
+				return true;
+			}
+			
+			
+		}
+		message : 'Modo de Operacao Automatica ou Hibrido: Ao Menos 1 Sirene Com Baixo Volume e 1 Lampada Amarela Devem Serem Especificadas para um Alerta (Atuadores).'
+	}
+
+	constraint warningMessagesForManualMode {
+		check { 
+			var lowSiren:=0;
+			var yellowLed:=0;
+			var operationMode;
+			var fireMonitoring := FireMonitoringDomain.allInstances().at(0);
+			var verify:=false;
+			
+			for (i in fireMonitoring.hasElement){
+				if(i.type.name.compareTo("OperationModeCompartment") == 0 and i.hasOperationMode.isDefined()){
+					operationMode:=i.hasOperationMode;
+					if(operationMode.type.name.compareTo("Manual") == 0){
+						verify:=true;
+					}
+					break;
+				}
+			}
+			if(verify and self.hasActuator.isDefined() and self.hasActuator.size >= 2){
+					for(a in self.hasActuator) {
+						
+						if(a.type.name.compareTo("LowDecibels") == 0){
+							lowSiren := lowSiren+1;
+						}
+						if(a.type.name.compareTo("YellowLed") == 0){
+							yellowLed := yellowLed+1;
+						}
+					}
+			}
+			
+			if(verify){
+				if (lowSiren > 0 and yellowLed >0){return false;}else{return true;}	
+			}else{
+				return true;
+			}
+			
+			
+		}
+		message : 'Modo de Operacao Manual: Nao sao permitidas sirenes de volumes baixos e Lampadas Amarelas no Modo de Operacao Manual (Atuadores).'
+	}
+
+	constraint alarmMessages {
+		check { 
+			var highSiren:=0;
+			var redLed:=0;
+			if(self.hasActuator.isDefined() and self.hasActuator.size >= 2){
+				for(a in self.hasActuator) {
+					if(a.type.name.compareTo("HighDecibels") == 0){
+						highSiren := highSiren+1;
+					}else if(a.type.name.compareTo("RedLed") == 0){
+							redLed := redLed+1;
+					}
+				}
+			}
+			
+			if (highSiren > 0 and redLed >0){return true;}else{return false;}	
+		}
+		message : 'Validacao Generica: Ao Menos 1 Sirene Com Alto Volume e 1 Lampada Vermelha Devem Serem Especificadas para um Alarme (Atuadores).'
+	}
+}
+
+context DeviceCompartment{
+
+	
+// Validacao para Modo de Operacao Automatica ou Hibrido
+	
+	constraint hasSensorsForAutomaticAndHybridMode {
+
+		check {
+			var response:=true;
+			var operationMode;
+			var fireMonitoring := FireMonitoringDomain.allInstances().at(0);
+			var verify:=false;
+			
+			for (i in fireMonitoring.hasElement){
+				if(i.type.name.compareTo("OperationModeCompartment") == 0 and i.hasOperationMode.isDefined()){
+					operationMode:=i.hasOperationMode;
+					if(operationMode.type.name.compareTo("Automatic") == 0 or operationMode.type.name.compareTo("Hybrid") == 0){
+						verify:=true;
+					}
+					break;
+				}
+			}
+			if(verify){
+				var find:=false;
+				if(self.hasDevice.isDefined()){
+					for(a in self.hasDevice) {
+						if(a.type.name.compareTo("TemperatureSensor") == 0
+							or a.type.name.compareTo("SmokeSensor") == 0
+							or a.type.name.compareTo("GasSensor") == 0
+							or a.type.name.compareTo("FlameSensor") == 0){
+							find:= true;
+						}
+					}			
+				}
+				response:=find;
+			}
+			return response;
+		}
+		message : 'Modo de Operacao Automatica ou Hibrido: Ao menos 1 Sensor Deve Ser Inserido (Equipamentos).'
+	}
+	
+		constraint hasSensorLimitsDefined {
+		check	{
+					var operationMode;
+					var fireMonitoring := FireMonitoringDomain.allInstances().at(0);
+					var verify:=false;
+			
+					for (i in fireMonitoring.hasElement){
+						if(i.type.name.compareTo("OperationModeCompartment") == 0 and i.hasOperationMode.isDefined()){
+							operationMode:=i.hasOperationMode;
+							if(operationMode.type.name.compareTo("Automatic") == 0 or operationMode.type.name.compareTo("Hybrid") == 0){
+								verify:=true;
+							}
+							break;
+						}
+					}
+					
+					if(verify){
+						if(self.hasDevice.isDefined()){
+							for(a in self.hasDevice) {
+								if((a.type.name.compareTo("TemperatureSensor") == 0
+								or a.type.name.compareTo("SmokeSensor") == 0
+								or a.type.name.compareTo("GasSensor") == 0
+								or a.type.name.compareTo("FlameSensor") == 0)
+								and (a.warningLimit==0 or a.alarmLimit==0)){
+									return false;
+								}
+							}
+						}
+					}
+					return true;
+				}
+		message : 'Validacao Generica: Os Limites de Alerta e Alarme dos Sensores Devem ser Especificados (Equipamentos).'
+	}
+
+
+	
+	constraint hasButtonForWarning {
+		check {
+			
+			var response:=true;
+			var operationMode;
+			var fireMonitoring := FireMonitoringDomain.allInstances().at(0);
+			var verify:=false;
+			
+			for (i in fireMonitoring.hasElement){
+				if(i.type.name.compareTo("OperationModeCompartment") == 0 and i.hasOperationMode.isDefined()){
+					operationMode:=i.hasOperationMode;
+					if(operationMode.type.name.compareTo("Automatic") == 0 or operationMode.type.name.compareTo("Hybrid") == 0){
+						verify:=true;
+					}
+					break;
+				}
+			}
+			
+			if(verify){
+				response:=false;
+				if(self.hasDevice.isDefined()){
+					for(a in self.hasDevice) {
+						if(a.type.name.compareTo("DisableWarningButton") == 0){
+							response:= true;
+						}
+					}
+				}	
+			}
+			
+			return response;
+		}
+		message : 'Modo de Operacao Automatica ou Hibrido: Ao menos 1 Botao para Desabilitar Alerta Deve Ser Inserido (Equipamentos).'
+	}
+	
+// Validacao apenas para Modo de Operacao Automatica	
+	constraint hasButtonOrHandleForAlarm {
+		check {
+			var response:=true;
+			var operationMode;
+			var fireMonitoring := FireMonitoringDomain.allInstances().at(0);
+			var verify:=false;
+			
+			for (i in fireMonitoring.hasElement){
+				if(i.type.name.compareTo("OperationModeCompartment") == 0 and i.hasOperationMode.isDefined()){
+					operationMode:=i.hasOperationMode;
+					if(operationMode.type.name.compareTo("Automatic") == 0){
+						verify:=true;
+					}
+					break;
+				}
+			}
+			if(verify){
+				if(self.hasDevice.isDefined()){
+					for(a in self.hasDevice) {
+						if(a.type.name.compareTo("EnableAndDisableAlarmButton") == 0
+							or a.type.name.compareTo("Handle") == 0){
+							response:= false;
+						}
+					}
+				}else{response:=false;}
+			}	
+			
+			return response;
+		}
+		message : 'Modo de Operacao Automatica: Botoes ou Alavancas Para Habilitar Alarme Nao Sao Permitidos (Equipamentos).'
+	}
+	
+// Validacao apenas para modo manual
+
+	constraint hasSensorsForManualMode {
+		check {
+			var response:=true;
+			var operationMode;
+			var fireMonitoring := FireMonitoringDomain.allInstances().at(0);
+			var verify:=false;
+			
+			for (i in fireMonitoring.hasElement){
+				if(i.type.name.compareTo("OperationModeCompartment") == 0 and i.hasOperationMode.isDefined()){
+					operationMode:=i.hasOperationMode;
+					if(operationMode.type.name.compareTo("Manual") == 0){
+						verify:=true;
+					}
+					break;
+				}
+			}
+			if(verify){
+				for(a in self.hasDevice) {
+					if(a.type.name.compareTo("TemperatureSensor") == 0
+						or a.type.name.compareTo("SmokeSensor") == 0
+						or a.type.name.compareTo("GasSensor") == 0
+						or a.type.name.compareTo("FlameSensor") == 0){
+						response:= false;
+					}
+				}
+			}
+			
+			return response;
+		}
+		message : 'Modo de Operacao Manual: Sensores Nao Sao Permitidos. (Equipamentos)'
+	}	
+	
+	constraint hasButtonForWarningWhenManualMode {
+		check {
+		
+			var response:=true;
+			var operationMode;
+			var fireMonitoring := FireMonitoringDomain.allInstances().at(0);
+			var verify:=false;
+			
+			for (i in fireMonitoring.hasElement){
+				if(i.type.name.compareTo("OperationModeCompartment") == 0 and i.hasOperationMode.isDefined()){
+					operationMode:=i.hasOperationMode;
+					if(operationMode.type.name.compareTo("Manual") == 0){
+						verify:=true;
+					}
+					break;
+				}
+			}
+			if(verify){
+				for(a in self.hasDevice) {
+					if(a.type.name.compareTo("DisableWarningButton") == 0){
+						response:= false;
+					}
+				}
+			}
+			return response;
+		}
+		message : 'Modo de Operacao Manual: Botoes para Desabilitar Alerta Nao Sao Permitidos.(Equipamentos)'
+	}
+	
+	constraint hasButtonForAlarmWhenManualMode {
+		check {
+		
+			var response:=true;
+			var operationMode;
+			var fireMonitoring := FireMonitoringDomain.allInstances().at(0);
+			var verify:=false;
+			
+			for (i in fireMonitoring.hasElement){
+				if(i.type.name.compareTo("OperationModeCompartment") == 0 and i.hasOperationMode.isDefined()){
+					operationMode:=i.hasOperationMode;
+					if(operationMode.type.name.compareTo("Manual") == 0){
+						verify:=true;
+					}
+					break;
+				}
+			}
+			if(verify){
+				response:=false;
+				for(a in self.hasDevice) {
+					if(a.type.name.compareTo("EnableAndDisableAlarmButton") == 0){
+						response:= true;
+					}
+				}
+			}
+			
+			return response;
+		}
+		message : 'Modo de Operacao Manual: Ao Menos 1 Botao para Habilitar/Desabilitar Alarme Deve Ser Inserido. (Equipamentos)'
+	}
+}
+
+context Device{
+
+// Validacao Generica
+
+		constraint hasPortNumberDefined {
+		check	{
+					var classNameTranslate;
+					if(self.type.name.compareTo("DisableWarningButton")==0){classNameTranslate:="Botao para Desabilitar Alerta";}
+					if(self.type.name.compareTo("EnableAndDisableAlarmButton")==0){classNameTranslate:="Botao para Habilitar-Desabilitar Alarme";}
+					if(self.type.name.compareTo("TemperatureSensor")==0){classNameTranslate:="Sensor de Temperatura";}
+					if(self.type.name.compareTo("SmokeSensor")==0){classNameTranslate:="Sensor de Fumaca";}
+					if(self.type.name.compareTo("GasSensor")==0){classNameTranslate:="Sensor de Gas";}					
+					if(self.type.name.compareTo("FlameSensor")==0){classNameTranslate:="Sensor de Chama";}
+									
+					if(self.portNumber == 0){
+						return false;
+							
+					}					
+					return true;
+				}
+		message : classNameTranslate+': O Numero da Porta Logica Ser Inseridos (Equipamentos).'
+	}
+}
+
+context Actuator{
+
+// Validacao Generica
+
+		constraint hasPortNumberDefined {
+		check	{
+					var classNameTranslate;
+					if(self.type.name.compareTo("LowDecibels")==0){classNameTranslate:="Sirene com Baixo Volume";}
+					if(self.type.name.compareTo("HighDecibels")==0){classNameTranslate:="Sirene com Alto Volume";}
+					if(self.type.name.compareTo("RedLed")==0){classNameTranslate:="Lampada Vermelha";}
+					if(self.type.name.compareTo("YellowLed")==0){classNameTranslate:="Lampada Amarela";}
+					if(self.type.name.compareTo("WaterSprinkler")==0){classNameTranslate:="Borrifador de Agua";}					
+					if(self.type.name.compareTo("GasSprinkler")==0){classNameTranslate:="Borrifador de CO2";}
+					if(self.type.name.compareTo("Phone")==0){classNameTranslate:="Chamada para Bombeiros";}
+					
+					if(self.portNumber == 0){
+						return false;
+							
+					}
+					
+					return true;
+				}
+		message : classNameTranslate+': O Numero da Porta Logica Ser Inseridos (Atuadores).'
+	}
+}
+
+context Enable{
+
+	
+	constraint hasPortsConfigured {
+		check	{
+					if(self.verificationPort == 0 or self.activationPort==0){
+						return false;
+							}
+					return true;
+				}
+		message : 'Habilitar Redundancia: As Portas Logicas para Redundancia Devem Serem Especificadas (Habilitar-Desabilitar Redundancia).'
+	} 
+	
+	constraint isManualMode {
+		check	{					
+					var fireMonitoring := FireMonitoringDomain.allInstances().at(0);
+					for (i in fireMonitoring.hasElement){
+						if(i.type.name.compareTo("OperationModeCompartment") == 0 and i.hasOperationMode.isDefined() 
+							and i.type.name.compareTo("Manual") == 0){
+								return false;
+						}	
+					}
+					return true;
+				}
+		message : 'Habilitar Redundancia: Redundancia nao Pode Ser Habilitada no Modo de Operacao Manual (Habilitar-Desabilitar Redundancia).'
+	} 
+	
+}
+
+context Sensor{
+
+	constraint hasLimits {
+
+		check {
+				if(self.warningLimit==0 or self.alarmLimit=0){
+					return false;
+				}
+				return true;
+		}
+		message : 'Sensor: Os Valores Limites de Alerta e Alarme Devem Serem Especificados (Equipamentos).'
+	}
+
+}	

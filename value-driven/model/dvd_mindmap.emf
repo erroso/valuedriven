@@ -1,0 +1,67 @@
+@namespace(uri="dvd_mindmap", prefix="dvd_mindmap")
+package dvd_mindmap;
+
+@gmf.diagram
+class DynamicValueDescriptionModel {
+  val Edge[+] edges;
+  val Node[+] nodes;
+}
+
+class ValueExchange extends Node {
+  attr String description;
+  attr EnumPriority priority;
+  attr String valueLevelAgreement;
+  ref EnvironmentActor[1] environmentActor;
+  ref MainActor[1] mainActor;
+  ref OutValuePort[1] outValuePort;
+  ref InValuePort[1] inValuePort;
+}
+
+@gmf.node(label="name")
+class Node {
+  id attr String nodeID;
+  val Notation[*] visualNotation;
+  attr String name;
+}
+
+@gmf.link(source="source", target="target", style="dot", width="2", target.decoration="arrow")
+class Edge {
+  ref Node[1] source;
+  ref Node[1] target;
+}
+
+
+class OutValuePort extends Node {
+  ref ValueExchange[1] belongsToValueExchange;
+  ref ValueObject[1] valueObject;
+}
+
+class ValueObject extends Node {
+}
+
+enum EnumPriority {
+  low = 0;
+  medium = 0;
+  high = 0;
+  notDefined = 0;
+}
+
+@gmf.node(figure="figures.MainActorFigure", label.icon="false", label="name", label.placement="external")
+class MainActor extends Node {
+  ref ValueExchange[+] belongsToValueExchange;
+}
+
+@gmf.node(label="name", figure="rectangle", color="102,178,255")
+class EnvironmentActor extends Node {
+  ref ValueExchange[+] belongsToValueExchange;
+}
+
+class Notation {
+  !ordered id attr String[1] notationID;
+}
+
+class InValuePort extends Node {
+  ref ValueExchange[1] belongsToValueExchange;
+  ref ValueObject[1] valueObject;
+}
+

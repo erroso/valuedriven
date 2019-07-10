@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated dvd_mindmap -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="dvd_mindmap.presentation.Dvd_mindmapModelWizardID"
+            name="%_UI_Dvd_mindmapModelWizard_label"
+            class="dvd_mindmap.presentation.Dvd_mindmapModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/Dvd_mindmapModelFile.gif">
+         <description>%_UI_Dvd_mindmapModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated dvd_mindmap -->
+      <editor
+            id="dvd_mindmap.presentation.Dvd_mindmapEditorID"
+            name="%_UI_Dvd_mindmapEditor_label"
+            icon="icons/full/obj16/Dvd_mindmapModelFile.gif"
+            extensions="dvd_mindmap"
+            class="dvd_mindmap.presentation.Dvd_mindmapEditor"
+            contributorClass="dvd_mindmap.presentation.Dvd_mindmapActionBarContributor">
+      </editor>
+   </extension>
+
+</plugin>
